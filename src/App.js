@@ -40,7 +40,7 @@ class App extends React.Component {
 
   listDrivers = () => {
     //fetch('api/drivers')
-    fetch('https://waste-management-admin.herokuapp.com/drivers')
+    fetch('https://cors-anywhere.herokuapp.com/https://waste-management-admin.herokuapp.com/drivers')
     .then(drivers => drivers.json())
     .then(r => {
         this.setState({drivers: r})
