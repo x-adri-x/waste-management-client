@@ -40,7 +40,13 @@ class App extends React.Component {
 
   listDrivers = () => {
     //fetch('api/drivers')
-    fetch('https://waste-management-admin.herokuapp.com/drivers')
+    let url = ''
+    if(process.env.NODE_ENV === 'development'){
+      url = process.env.REACT_APP_DEV_API_URL + 'api/drivers'
+    } else {
+      url = process.env.REACT_APP_PRD_API_URL + 'drivers'
+    }
+    fetch(url)
     .then(drivers => drivers.json())
     .then(r => {
         this.setState({drivers: r})
