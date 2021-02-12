@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Result from './Result.js'
-import {searchState} from './Atoms.js'
+import Result from '../components/Result.js'
+import {searchState} from '../components/Atoms.js'
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 

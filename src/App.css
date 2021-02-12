@@ -3,6 +3,11 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+a {
+  color: white !important;
+  text-decoration: none !important;
+}
+
 .row-header {
   background-color: #282c34;
   min-height: 15vh;
@@ -16,15 +21,26 @@
 }
 
 .drivers-label {
-  width: 20vw;
-  background-color: aqua;
   padding: 1.8vh 3vw 1.8vh 0.5vw;
-  font-size: 1.2em;
+  font-size: 2em;
   letter-spacing: 0.06em;
-  background: linear-gradient(to right, rgb(237, 180, 171), 60%, rgb(245, 222, 219));
-  border-top-right-radius: 3.5em;
   font-weight: 400;
-  margin-top: 10vh;
+}
+
+.navigation {
+  background-color: #282c34;
+  width: 100vw;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.navigation ul li {
+  display: inline;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  font-size: 1.2em;
 }
 
 .drivers-admin-btns {

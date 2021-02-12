@@ -1,8 +1,8 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {searchState} from './Atoms.js'
+import {searchState} from '../components/Atoms.js'
 import { useRecoilState, useRecoilValue } from 'recoil';
-import SmallResult from './SmallResult.js'
+import SmallResult from '../components/SmallResult.js'
 
 function Update () { 
 
