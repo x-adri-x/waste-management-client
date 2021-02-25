@@ -1,6 +1,6 @@
 import React from 'react'
 import {useRecoilValue} from 'recoil'
-import {searchState} from './Atoms.js'
+import {searchState} from '../atoms/Atoms.js'
 
 function SmallResult () {
     let results = useRecoilValue(searchState)

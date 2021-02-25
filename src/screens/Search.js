@@ -1,8 +1,8 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Result from '../components/Result.js'
-import {searchState} from '../components/Atoms.js'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {searchState} from '../atoms/Atoms.js'
+import { useRecoilState } from 'recoil';
 
 
 function Search () { 
@@ -19,66 +19,6 @@ function Search () {
         setSearch(result)
         document.querySelector('#searchForm').reset()
         }
-
-    const urlBase64ToUint8Array = (base64String) => {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding)
-              .replace(/-/g, '+')
-              .replace(/_/g, '/');
-           
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-           
-            for (let i = 0; i < rawData.length; ++i) {
-              outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-    }
-
-    const sendSubscription = (subscription) => {
-        return (
-            fetch('http://localhost:3000/api/notifications', {
-                method: "POST",
-                body: JSON.stringify(subscription),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-        )
-    }
-
-    const subscribeUser = () => {
-        const convertedVapidKey = urlBase64ToUint8Array('BAO-gzZEaIpZGRPDXSs8Cwa15U77Irdh7V8zuFPPqk7eso042a7WZCNGjK19iNeq6eY7gCgMLazzMC3rYEj8Mfc')
-        if('serviceWorker' in navigator) {
-            navigator.serviceWorker.ready.then((registration) => {
-                if(!registration.pushManager){
-                    console.log('Push manager unavailable.')
-                    return
-                }
-                registration.pushManager.getSubscription().then((existedSubscription) => {
-                    if(existedSubscription === null) {
-                        console.log('No subscription detected, make a request.')
-                        registration.pushManager.subscribe({
-                            applicationServerKey: convertedVapidKey,
-                            userVisibleOnly: true
-                        }).then((newSubscription) => {
-                            console.log('New subscription added.')
-                            sendSubscription(newSubscription)
-                        }).catch(e => {
-                            if(Notification.permission !== 'granted'){
-                                console.log('Permission was not granted.')
-                            } else {
-                                console.error('An error ocurred during the subscription process.', e)
-                            }
-                        })
-                    } else {
-                        console.log('Existed subscription detected.')
-                        sendSubscription(existedSubscription)
-                    }
-                })
-            }).catch(e => console.error('An error ocurred during Service Worker registration.', e))
-        } 
-    }
 
     const message = async() => {
         const message = {
