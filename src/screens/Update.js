@@ -34,7 +34,6 @@ function Update () {
         document.querySelector('#updateform').reset()
         fetch(url, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
