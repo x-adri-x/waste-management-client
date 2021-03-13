@@ -24,6 +24,7 @@ function Drivers () {
         } else {
           url = process.env.REACT_APP_PRD_API_URL + 'drivers'
         }
+        
         fetch(url)
         .then(drivers => drivers.json())
         .then(r => {

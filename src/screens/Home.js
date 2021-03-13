@@ -138,7 +138,7 @@ function Home () {
         } else {
           url = process.env.REACT_APP_PRD_API_URL + 'drivers/search'
         }
-
+        console.log(url)
       await fetch(url, {
         method: 'POST',
         headers: {
