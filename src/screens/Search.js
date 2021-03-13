@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Result from '../components/Result.js'
 import {searchState, warningMessageState, responseStatus} from '../atoms/Atoms.js'
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { generateFetchUrl } from '../utils/generateFetchUrl.js';
 
 
 function Search () { 
@@ -18,12 +19,7 @@ function Search () {
         const first_name = data.get('firstName') || null
         const last_name = data.get('lastName') || null
         
-        let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + 'api/drivers/search'
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + 'drivers/search'
-        }
+        let url = generateFetchUrl('drivers/search')
 
         let searchParams = {
             "first_name": first_name,

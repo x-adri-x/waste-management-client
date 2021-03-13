@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {warningMessageState} from '../atoms/Atoms.js'
 import {useRecoilValue, useRecoilState} from 'recoil';
 import {validateData} from '../utils/formfunction.js'
+import { generateFetchUrl } from '../utils/generateFetchUrl.js';
 
 function Update () { 
 
@@ -28,12 +29,8 @@ function Update () {
             data.get(field) !== '' && (body[field] = data.get(field))
         })
         
-        let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + `api/drivers/update/uid/${body.uid}`
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + `drivers/update/uid/${body.uid}`
-        }
+        let url = generateFetchUrl('drivers/update/uid/')
+        url = `${body.uid}`
         document.querySelector('#updateform').reset()
         fetch(url, {
             method: 'POST',

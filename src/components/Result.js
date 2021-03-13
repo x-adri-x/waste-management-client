@@ -9,11 +9,11 @@ function Result () {
         return (
             <div style = {{marginTop: '2vh'}} className = 'result'>
                 <h3>Results</h3>
-                {(results).map(obj => {
+                {(results).map((obj, index) => {
                     return(
-                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, padding: '2vh', width: 'fit-content'}}>
+                        <div key = {index} className = 'list-item-box'>
                         {Object.entries(obj).map(([key, val]) => 
-                            <p key={key} style = {{textAlign: 'left'}}>{key} : {val}</p>
+                            <p key={key} style = {{textAlign: 'left'}}><span className = 'bold'>{key} : </span>{val}</p>
                         )}
                     </div>
                     )  

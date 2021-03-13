@@ -8,11 +8,11 @@ function List () {
         return(
             <div className = 'list hidden'>
                 <h3>List of drivers</h3>
-                {list.map(obj => {
+                {list.map((obj, index) => {
                     return(
-                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, padding: '2vh', width: 'fit-content', marginBottom: '2vh'}}>
+                        <div key = {index} className = 'list-item-box'>
                         {Object.entries(obj).map(([key, val]) => 
-                            <p key={key} style = {{textAlign: 'left'}}>{key} : {val}</p>
+                            <p key={key} style = {{textAlign: 'left'}}><span className = 'bold'>{key} : </span>{val}</p>
                         )}
                     </div>
                     )  

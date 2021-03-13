@@ -2,18 +2,14 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import { searchState } from '../atoms/Atoms.js'
 import Result from '../components/Result.js'
+import {generateFetchUrl} from '../utils/generateFetchUrl.js'
 
 function MessagesStarterScreen() {
 
     const [search, setSearch] = useRecoilState(searchState)
 
     const showUserMessages = () => {
-        let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + 'api/notifications/agent/user'
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + 'notifications/agent/user'
-        }
+        let url = generateFetchUrl('notifications/agent/user')
         fetch(url)
         .then(notifications => notifications.json())
         .then(result => {
@@ -22,12 +18,7 @@ function MessagesStarterScreen() {
     }
 
     const showDriversMessages = () => {
-        let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + 'api/notifications/agent/driver'
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + 'notifications/agent/driver'
-        }
+        let url = generateFetchUrl('notifications/agent/driver')
         fetch(url)
         .then(notifications => notifications.json())
         .then(result => {

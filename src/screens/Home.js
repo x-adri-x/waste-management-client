@@ -8,6 +8,7 @@ import {useRecoilState} from 'recoil'
 import {Centers} from '../components/Centers.js'
 import MessagesStarterScreen from './MessagesStarterScreen.js'
 import {toggleHidden} from '../utils/toggleHidden.js'
+import {generateFetchUrl} from '../utils/generateFetchUrl.js'
 import Result from '../components/Result.js'
 import WrappedMap from '../screens/Map.js'
 import {GoogleMap, DirectionsRenderer, withScriptjs, withGoogleMap} from 'react-google-maps'
@@ -85,19 +86,15 @@ function Home () {
     }
 
     const updateRoutes = (driver_id, route_id) => {
-      let url = ''
-      if(process.env.NODE_ENV === 'development'){
-        url = process.env.REACT_APP_DEV_API_URL + `api/maps/routes/route_id/${route_id}`
-      } else {
-        url = process.env.REACT_APP_PRD_API_URL + `maps/routesroute_id/${route_id}`
-      }
+      let url = generateFetchUrl('maps/routes/route_id/')
+      url += `${route_id}`
+      
       const data = {
         'driver_id': driver_id
       }
       
       fetch(url, {
         method: 'POST',
-        mode: 'cors',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -106,7 +103,6 @@ function Home () {
       })
       .then(response => response.json())
       .then(result => {
-        console.log(result)
         if(result.affectedRows === 1){
           console.log(`The number of affected rows were ${result.affectedRows}`)
         } else {
@@ -116,12 +112,7 @@ function Home () {
     }
 
     const getAllRoutes = async() => {
-      let url = ''
-      if(process.env.NODE_ENV === 'development'){
-        url = process.env.REACT_APP_DEV_API_URL + 'api/maps/routes'
-      } else {
-        url = process.env.REACT_APP_PRD_API_URL + 'maps/routes'
-      }
+      let url = generateFetchUrl('maps/routes')
       let response = await fetch(url)
       .then(response => response.json())
       .then(result => result)
@@ -132,13 +123,8 @@ function Home () {
       let searchParam = {
         "status_id": 1
       }
-      let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + 'api/drivers/search'
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + 'drivers/search'
-        }
-        console.log(url)
+      let url = generateFetchUrl('drivers/search')
+      
       await fetch(url, {
         method: 'POST',
         headers: {
@@ -148,10 +134,7 @@ function Home () {
         body: JSON.stringify(searchParam)
         })
         .then(response => response.json())
-        .then(result => {
-            console.log(result)
-            setSearch(result)
-        })
+        .then(result => setSearch(result))
     }
     
     return(

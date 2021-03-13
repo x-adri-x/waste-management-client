@@ -1,8 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { warningMessageState, responseStatus} from '../atoms/Atoms.js';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {warningMessageState, responseStatus} from '../atoms/Atoms.js';
 import {validateData} from '../utils/formfunction.js'
+import {generateFetchUrl} from '../utils/generateFetchUrl.js'
 
 function Add(){
 
@@ -44,12 +45,7 @@ function Add(){
             "status_id": 0
         }
         
-        let url = ''
-        if(process.env.NODE_ENV === 'development'){
-          url = process.env.REACT_APP_DEV_API_URL + 'api/drivers'
-        } else {
-          url = process.env.REACT_APP_PRD_API_URL + 'drivers'
-        }
+        let url = generateFetchUrl('drivers')
         document.querySelector('#addform').reset()
         await fetch(url, {
             method: 'POST',
