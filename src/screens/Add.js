@@ -49,7 +49,6 @@ function Add(){
         document.querySelector('#addform').reset()
         await fetch(url, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -58,7 +57,6 @@ function Add(){
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 if(result.affectedRows === 1){
                     setResponse(`The number of affected rows were ${result.affectedRows}`)
                 } else {
