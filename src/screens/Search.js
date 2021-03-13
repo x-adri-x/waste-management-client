@@ -1,23 +1,56 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Result from '../components/Result.js'
-import {searchState} from '../atoms/Atoms.js'
-import { useRecoilState } from 'recoil';
+import {searchState, warningMessageState, responseStatus} from '../atoms/Atoms.js'
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 
 function Search () { 
     const [search, setSearch] = useRecoilState(searchState)
+    const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
+    const [response, setResponse] = useRecoilState(responseStatus)
+    let warning = useRecoilValue(warningMessageState)
+    let messages = []
 
-    const getDriver = async (e) => {
+    const onSubmit = async(e) => {
         e.preventDefault()
         const data = new FormData(e.target)
-        const first_name = data.get('firstName')
-        const last_name = data.get('lastName')
-        let url = `api/drivers/search/first_name/${first_name}/last_name/${last_name}`
-        const result = await fetch(url).then(r => r.json()).catch(e => console.log(e))
-        console.log(result)
-        setSearch(result)
+        const first_name = data.get('firstName') || null
+        const last_name = data.get('lastName') || null
+        
+        let url = ''
+        if(process.env.NODE_ENV === 'development'){
+          url = process.env.REACT_APP_DEV_API_URL + 'api/drivers/search'
+        } else {
+          url = process.env.REACT_APP_PRD_API_URL + 'drivers/search'
+        }
+
+        let searchParams = {
+            "first_name": first_name,
+            "last_name": last_name
+        }
+        
+        await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchParams)
+            })
+            .then(response => response.json())
+            .then(result => {
+                setSearch(result)
+                if(result.affectedRows === 1){
+                    setResponse(`The number of affected rows were ${result.affectedRows}`)
+                } else {
+                    setResponse(result.sqlMessage)
+                }
+            })
+        
         document.querySelector('#searchForm').reset()
+        setWarningMessage([])
         }
 
     const message = async() => {
@@ -36,35 +69,60 @@ function Search () {
               'Accept-encoding': 'gzip, deflate',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(message),
+            body: JSON.stringify(message)
           })
+    }
 
-        // const timestamp = new Date().toLocaleString()
-        // const message = {
-        //     'message': e.target.innerHTML,
-        //     'user_id': 18,
-        //     'timestamp': timestamp
-        // }
-        // fetch('api/notifications', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(message)
-        // })
-        // .then(response => console.log(response.json()))
-        //subscribeUser()
+    function validateForm() {
+        if(messages.length > 0){
+            return true
+        } else {return false}
+    }
+
+    const handleChange = (e) => {
+        setWarningMessage([])
+        const name = e.target.name
+        const length = e.target.value.length
+        const value =e.target.value
+        let msg = ''
+        console.log('im in handleChange beginning: '+warning)
+        if(name === 'firstName' || name === 'lastName'){
+            if(value.match(/\d+/g) != null){
+                msg = 'Name contains numbers.'
+                messages.push(msg)
+            }
+            if(length < 2){
+                msg = 'First name and last name should at least be 2 characters long.'
+                messages.push(msg)
+            }
+        }
+        setWarningMessage(messages)
     }
         
         return(
             <div className = 'search hidden'>
                 <button onClick = {message}>Message</button>
                 <h3>Search driver</h3>
-                <form onSubmit = {getDriver} id = 'searchForm'>
-                    <label htmlFor = 'firstName'>First name:</label>
-                    <input type = 'text' id = 'firstName' name = 'firstName'></input>
-                    <label htmlFor = 'lastName'>Last name:</label>
-                    <input type = 'text' id = 'lastName' name = 'lastName'></input>
+                <form onSubmit = {onSubmit} id = 'searchForm'>
+                    <div>
+                        <label htmlFor = 'firstName'>First name:</label>
+                        <input 
+                        type = 'text' 
+                        id = 'firstName' 
+                        name = 'firstName' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'lastName'>Last name:</label>
+                        <input 
+                        type = 'text' 
+                        id = 'lastName' 
+                        name = 'lastName'
+                        onChange = {handleChange} 
+                        />
+                    </div>
+                    {validateForm ? <p className = 'warning'>{warning}</p> : null }
                     <button type="submit" className="btn btn-outline-info">Search driver</button>
                 </form>
                 <Result />

@@ -7,10 +7,11 @@ function Result () {
     
     if(results.length > 0) {
         return (
-            <div>
+            <div style = {{marginTop: '2vh'}} className = 'result'>
+                <h3>Results</h3>
                 {(results).map(obj => {
                     return(
-                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, borderRadius: '2vw', padding: '2vh', width: '15vw'}}>
+                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, padding: '2vh', width: 'fit-content'}}>
                         {Object.entries(obj).map(([key, val]) => 
                             <p key={key} style = {{textAlign: 'left'}}>{key} : {val}</p>
                         )}
@@ -21,8 +22,7 @@ function Result () {
         ) 
     } else {
         return null
-    }
-    
-}
+    }  
+} 
 
 export default Result

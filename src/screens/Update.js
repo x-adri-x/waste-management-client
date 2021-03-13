@@ -1,56 +1,130 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {searchState} from '../atoms/Atoms.js'
-import { useRecoilState, useRecoilValue } from 'recoil';
-import SmallResult from '../components/SmallResult.js'
+import {warningMessageState} from '../atoms/Atoms.js'
+import {useRecoilValue, useRecoilState} from 'recoil';
+import {validateData} from '../utils/formfunction.js'
 
 function Update () { 
 
-    const [search, setSearch] = useRecoilState(searchState)
-    const data = useRecoilValue(searchState)
+    const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
+    const message = useRecoilValue(warningMessageState)
+    let messages = []
 
-    async function getDriver(e) {
-        e.preventDefault()
-        const data = new FormData(e.target)
-        const first_name = data.get('firstName')
-        const last_name = data.get('lastName')
-        //let url = `api/drivers/search/first_name/${first_name}/last_name/${last_name}`
-        let url = `https://waste-management-admin.herokuapp.com/api/drivers/search/first_name/${first_name}/last_name/${last_name}`
-        const result = await fetch(url).then(r => r.json()).catch(e => console.log(e))
-        setSearch(result)
-        document.querySelector('#searchForm').reset()
+    function handleChange (e) {
+        const name = e.target.name
+        const length = e.target.value.length
+        const value =e.target.value
+        messages = validateData(name, length, value)
+        setWarningMessage(messages)
     }
 
+    function handleSubmit(e) {
+        e.preventDefault()
+        const data = new FormData(e.target)
+        const fields = ['first_name', 'last_name', 'uid', 'date_of_birth', 'private_phone', 'work_phone', 'email']
+        let body = {}
+
+        fields.map(field =>  {
+            data.get(field) !== '' && (body[field] = data.get(field))
+        })
+        
+        let url = ''
+        if(process.env.NODE_ENV === 'development'){
+          url = process.env.REACT_APP_DEV_API_URL + `api/drivers/update/uid/${body.uid}`
+        } else {
+          url = process.env.REACT_APP_PRD_API_URL + `drivers/update/uid/${body.uid}`
+        }
+        document.querySelector('#updateform').reset()
+        fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if(result.affectedRows === 1){
+                    console.log(`The number of affected rows were ${result.affectedRows}`)
+                } else {
+                    console.log(result.sqlMessage)
+                }
+            })
+    }
    
         return(
             <div className = 'update hidden'>
-                <div>
-                <h3>Search driver</h3>
-                <form onSubmit = {getDriver} id = 'searchForm'>
-                    <label htmlFor = 'firstName'>First name:</label>
-                    <input type = 'text' id = 'firstName' name = 'firstName'></input>
-                    <label htmlFor = 'lastName'>Last name:</label>
-                    <input type = 'text' id = 'lastName' name = 'lastName'></input>
-                    <button type="submit" className="btn btn-outline-info">Search driver</button>
-                </form>
-                {data.length > 0 ? <SmallResult /> : null}
-            </div>
-                <form>
-                    <label htmlFor = 'firstName'>First name:</label>
-                    <input type = 'text' id = 'firstName' name = 'firstName'></input>
-                    <label htmlFor = 'lastName'>Last name:</label>
-                    <input type = 'text' id = 'lastName' name = 'lastName'></input>
-                    <label htmlFor = 'dateOfBirth'>Date of birth:</label>
-                    <input type = 'date' id = 'dateOfBirth' name = 'dateOfBirth'></input>
-                    <label htmlFor = 'privatePhone'>Phone number(private):</label>
-                    <input type = 'tel' id = 'privatePhone' name = 'privatePhone'></input>
-                    <label htmlFor = 'workPhone'>Phone number(work):</label>
-                    <input type = 'tel' id = 'workPhone' name = 'workPhone'></input>
-                    <label htmlFor = 'email'>E-mail:</label>
-                    <input type = 'email' id = 'email' name = 'email'></input>
-                    <label htmlFor = 'address'>Address:</label>
-                    <input type = 'text' id = 'address' name = 'address'></input>
+                <h3>Update driver information</h3>
+                <form onSubmit = {handleSubmit} id = 'updateform'>
+                    <div>
+                        <label htmlFor = 'first_name'>First name:</label>
+                        <input 
+                        type = 'text' 
+                        id = 'first_name' 
+                        name = 'first_name' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'last_name'>Last name:</label>
+                        <input 
+                        type = 'text' 
+                        id = 'last_name' 
+                        name = 'last_name' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'uid'>UID:</label>
+                        <input 
+                        type = 'text' 
+                        id = 'uid' 
+                        name = 'uid'
+                        placeholder = '*'
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'date_of_birth'>Date of birth:</label>
+                        <input 
+                        type = 'date' 
+                        id = 'date_of_birth' 
+                        name = 'date_of_birth' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'private_phone'>Phone number(private):</label>
+                        <input 
+                        type = 'tel' 
+                        id = 'private_phone' 
+                        name = 'private_phone' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'work_phone'>Phone number(work):</label>
+                        <input 
+                        type = 'tel' 
+                        id = 'work_phone' 
+                        name = 'work_phone' 
+                        onChange = {handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor = 'email'>E-mail:</label>
+                        <input 
+                        type = 'email' 
+                        id = 'email' 
+                        name = 'email' 
+                        onChange = {handleChange}
+                        />
+                    </div>
                     <button type="submit" className="btn btn-outline-info">Update driver</button>
+                    {message ? <p className = 'warning'>{message}</p> : null}
                 </form>
             </div>
         )

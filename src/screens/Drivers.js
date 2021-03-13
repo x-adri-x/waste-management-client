@@ -3,19 +3,21 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import CustomCard from '../components/List.js'
+import List from '../components/List.js'
 import Add from './Add.js'
 import Update from './Update.js'
 import Search from './Search.js'
+import {useResetRecoilState, useRecoilState, useRecoilValue} from 'recoil'
+import {driversState} from '../atoms/Atoms.js'
+import {toggleHidden} from '../utils/toggleHidden.js'
 
-class Drivers extends React.Component {
 
-    state = {
-        drivers: [],
-      }
+function Drivers () {
 
-    listDrivers = () => {
-        //fetch('api/drivers')
+    const [drivers, setDrivers] = useRecoilState(driversState)
+    const driversList = useRecoilValue(driversState)
+
+    function listDrivers() {
         let url = ''
         if(process.env.NODE_ENV === 'development'){
           url = process.env.REACT_APP_DEV_API_URL + 'api/drivers'
@@ -25,35 +27,23 @@ class Drivers extends React.Component {
         fetch(url)
         .then(drivers => drivers.json())
         .then(r => {
-            this.setState({drivers: r})
-            this.toggleHidden('list')
+          setDrivers(r)
+          toggleHidden('list')
         })
       }
     
-      addDrivers = () => {
-        this.toggleHidden('add')
+      function addDrivers () {
+        toggleHidden('add')
       }
     
-      updateDrivers = () => {
-        this.toggleHidden('update')
+      function updateDrivers () {
+        toggleHidden('update')
       }
     
-      searchDrivers = () => {
-        this.toggleHidden('search')
-      }
-    
-      toggleHidden = (type) => {
-        let active = document.querySelector('.active')
-        if(active !== null) {
-          active.classList.add('hidden')
-          active.classList.remove('active')
-        }
-        let el = document.getElementsByClassName(`${type}`)[0]
-        el.classList.remove('hidden')
-        el.classList.add('active')
+      function searchDrivers () {
+        toggleHidden('search')
       }
 
-    render(){
         return(
             <Container fluid className = 'App'>
             <Row>
@@ -61,17 +51,17 @@ class Drivers extends React.Component {
                 <p className = 'drivers-label'>DRIVERS administration</p>
                 <Row>
                   <Col className = 'drivers-admin-btns'>
-                    <Button variant = 'light' size = 'large' onClick = {this.listDrivers}>list</Button>
-                    <Button variant = 'light' size = 'large'  onClick = {this.searchDrivers}>search</Button>
-                    <Button variant = 'light' size = 'large' onClick = {this.addDrivers}>create</Button>
-                    <Button variant = 'light' size = 'large' onClick = {this.updateDrivers}>update</Button>
+                    <Button variant = 'light' size = 'large' onClick = {listDrivers}>list</Button>
+                    <Button variant = 'light' size = 'large'  onClick = {searchDrivers}>search</Button>
+                    <Button variant = 'light' size = 'large' onClick = {addDrivers}>create</Button>
+                    <Button variant = 'light' size = 'large' onClick = {updateDrivers}>update</Button>
                     <Button variant = 'light' size = 'large'>delete</Button>
                   </Col>
                   <Col></Col>
                 </Row>
               </Col>
               <Col className = 'col-drivers-data-tab'>
-                  <CustomCard data = {this.state.drivers} />
+                  <List />
                   <Add />
                   <Search />
                   <Update />
@@ -79,8 +69,6 @@ class Drivers extends React.Component {
             </Row>
           </Container>
         )
-    }
-    
 }
 
 export default Drivers

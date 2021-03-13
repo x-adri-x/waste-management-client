@@ -1,16 +1,16 @@
 import React from 'react'
-import image from '../images/avatar.jpg'
+import {driversState} from '../atoms/Atoms.js'
+import {useRecoilValue} from 'recoil'
 
+function List () {
 
-export default class CustomCard extends React.Component {
-
-    render() {
+        let list = useRecoilValue(driversState)
         return(
             <div className = 'list hidden'>
-                {(this.props.data).map(obj => {
+                <h3>List of drivers</h3>
+                {list.map(obj => {
                     return(
-                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, padding: '2vh', width: 'fit-content'}}>
-                        {/* <img src = {image} style = {{width: 100, height: 100, textAlign: 'center'}} alt = 'bunny'/> */}
+                        <div style = {{borderStyle: 'solid', borderColor: 'grey', borderWidth: 1, padding: '2vh', width: 'fit-content', marginBottom: '2vh'}}>
                         {Object.entries(obj).map(([key, val]) => 
                             <p key={key} style = {{textAlign: 'left'}}>{key} : {val}</p>
                         )}
@@ -19,5 +19,6 @@ export default class CustomCard extends React.Component {
                 })}
             </div>
         )
-    }
 }
+
+export default List

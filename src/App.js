@@ -10,6 +10,7 @@ import {BrowserRouter, Route} from 'react-router-dom'
 import Navbar from './components/Navbar.js'
 import Home from './screens/Home.js'
 import Drivers from './screens/Drivers.js'
+import Catalog from './screens/Catalog.js'
 
 
 class App extends React.Component {
@@ -48,6 +49,7 @@ class App extends React.Component {
           <Navbar />
           <Route path = '/home' component = {Home} />
           <Route path = '/drivers' component = {Drivers} />
+          <Route path = '/catalog' component = {Catalog} />
         </Row>
       </Container>
       </RecoilRoot>

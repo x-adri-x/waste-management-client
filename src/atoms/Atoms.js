@@ -9,3 +9,18 @@ export const notificationsState = atom ({
   key: 'notificationsState',
   default: {}
 })
+
+export const warningMessageState = atom({
+  key: 'warningMessageState',
+  default: []
+})
+
+export const responseStatus = atom({
+  key: 'responseStatus',
+  default: ''
+})
+
+export const driversState = atom({
+  key: 'driversState',
+  default: []
+})
