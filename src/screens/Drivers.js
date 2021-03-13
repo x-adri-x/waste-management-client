@@ -7,7 +7,7 @@ import List from '../components/List.js'
 import Add from './Add.js'
 import Update from './Update.js'
 import Search from './Search.js'
-import {useResetRecoilState, useRecoilState, useRecoilValue} from 'recoil'
+import {useRecoilState, useRecoilValue} from 'recoil'
 import {driversState} from '../atoms/Atoms.js'
 import {toggleHidden} from '../utils/toggleHidden.js'
 

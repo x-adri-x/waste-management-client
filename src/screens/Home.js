@@ -141,7 +141,7 @@ function Home () {
 
       await fetch(url, {
         method: 'POST',
-        mode: 'cors',
+        mode: 'no-cors',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
