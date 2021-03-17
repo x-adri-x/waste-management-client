@@ -3,7 +3,7 @@ import React from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {warningMessageState, responseStatus} from '../atoms/Atoms.js';
 import {validateData} from '../utils/formfunction.js'
-import {generateFetchUrl} from '../utils/generateFetchUrl.js'
+import {generateUrl, validateSQLResult} from '../utils/retrieving_data.js'
 
 function Add(){
 
@@ -45,7 +45,7 @@ function Add(){
             "status_id": 0
         }
         
-        let url = generateFetchUrl('drivers')
+        let url = generateUrl('drivers')
         document.querySelector('#addform').reset()
         await fetch(url, {
             method: 'POST',
@@ -57,11 +57,7 @@ function Add(){
             })
             .then(response => response.json())
             .then(result => {
-                if(result.affectedRows === 1){
-                    setResponse(`The number of affected rows were ${result.affectedRows}`)
-                } else {
-                    setResponse(result.sqlMessage)
-                }
+                setResponse(validateSQLResult(result))
             })
         }
 

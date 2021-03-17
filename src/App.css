@@ -67,6 +67,7 @@ ul {
 
 input {
   display: block;
+  margin-top: 1vh !important;
 }
 
 form input {
@@ -83,20 +84,24 @@ form p {
   color: red;
 }
 
-::-webkit-input-placeholder {
+#addform ::-webkit-input-placeholder {
   color:red;
+  font-size: 0.8em;
 }
 
-::-moz-placeholder {
+#addform ::-moz-placeholder {
   color:red;
+  font-size: 0.8em;
 }
 
-::-ms-placeholder {
+#addform ::-ms-placeholder {
   color:red;
+  font-size: 0.8em;
 }
 
-::placeholder {
+#addform ::placeholder {
   color:red;
+  font-size: 0.8em;
 }
 
 .list div{
@@ -104,13 +109,24 @@ form p {
 }
 
 .bigbutton {
-  width: 10vw;
+  width: 15vw;
   height: 15vh;
   margin: 2vh;
   text-transform: uppercase;
   font-size: 14px;
   border-radius: 1vh;
   border-width: 1px;
+}
+
+.smallbutton {
+  width: 10vw;
+  height: 4vh;
+  margin: 2vh;
+  text-transform: uppercase;
+  font-size: 14px;
+  border-radius: 1vh;
+  border-width: 1px;
+  float: left;
 }
 
 .result div {
@@ -128,4 +144,9 @@ form p {
   padding: 2vh;
   width: 70vw;
   margin-bottom: 2vh;
+}
+
+.messagebox {
+  width: 25vw;
+  height: 12vh;
 }

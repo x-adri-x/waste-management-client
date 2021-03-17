@@ -1,12 +1,12 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {warningMessageState} from '../atoms/Atoms.js'
+import {responseStatus, warningMessageState} from '../atoms/Atoms.js'
 import {useRecoilValue, useRecoilState} from 'recoil';
 import {validateData} from '../utils/formfunction.js'
-import { generateFetchUrl } from '../utils/generateFetchUrl.js';
+import { generateUrl, validateSQLResult } from '../utils/retrieving_data.js';
 
 function Update () { 
-
+    const [response, setResponse] = useRecoilState(responseStatus)
     const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
     const message = useRecoilValue(warningMessageState)
     let messages = []
@@ -29,7 +29,7 @@ function Update () {
             data.get(field) !== '' && (body[field] = data.get(field))
         })
         
-        let url = generateFetchUrl('drivers/update/uid/')
+        let url = generateUrl('drivers/update/uid/')
         url = `${body.uid}`
         document.querySelector('#updateform').reset()
         fetch(url, {
@@ -42,12 +42,7 @@ function Update () {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result)
-                if(result.affectedRows === 1){
-                    console.log(`The number of affected rows were ${result.affectedRows}`)
-                } else {
-                    console.log(result.sqlMessage)
-                }
+                setResponse(validateSQLResult(result))
             })
     }
    

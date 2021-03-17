@@ -10,7 +10,8 @@ import Search from './Search.js'
 import {useRecoilState, useRecoilValue} from 'recoil'
 import {driversState} from '../atoms/Atoms.js'
 import {toggleHidden} from '../utils/toggleHidden.js'
-import {generateFetchUrl} from '../utils/generateFetchUrl.js'
+import {generateUrl} from '../utils/retrieving_data.js'
+import {formatDriver} from '../utils/formatting.js'
 
 function Drivers () {
 
@@ -18,24 +19,11 @@ function Drivers () {
     const driversList = useRecoilValue(driversState)
 
     function listDrivers() {
-        let url = generateFetchUrl('drivers')
-        console.log(url)
+        let url = generateUrl('drivers')
         fetch(url)
         .then(response => response.json())
         .then(result => {
-          let formatted_list = []
-          result.map(driver => {
-            const name = driver.first_name + ' ' + driver.last_name
-            let driver_object = {
-              'Name': name,
-              'Date of Birth': driver.date_of_birth,
-              'Work phone': driver.work_phone,
-              'Email': driver.email_address,
-              'Private phone': driver.private_phone,
-              'User ID': driver.uid
-            }
-            formatted_list.push(driver_object)
-          })
+          const formatted_list = formatDriver(result)
           setDrivers(formatted_list)
           toggleHidden('list')
         })

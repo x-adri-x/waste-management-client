@@ -24,3 +24,18 @@ export const driversState = atom({
   key: 'driversState',
   default: []
 })
+
+export const uidState = atom ({
+  key: 'uidState',
+  default: ''
+})
+
+export const messageState = atom({
+  key: 'messageState',
+  default: ''
+})
+
+export const idState = atom({
+  key: 'idState',
+  default: ''
+})
