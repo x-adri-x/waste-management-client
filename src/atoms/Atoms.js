@@ -1,7 +1,22 @@
 import {atom} from 'recoil'
 
-export const searchState = atom({
-    key: 'searchState',
+export const emailState = atom({
+  key: 'emailState',
+  default: ''
+})
+
+export const passwordState = atom({
+  key: 'passwordState',
+  default: ''
+})
+
+export const authState = atom({
+  key: 'authState',
+  default: false
+})
+
+export const listState = atom({
+    key: 'listState',
     default: []
   })
 
@@ -18,11 +33,6 @@ export const warningMessageState = atom({
 export const responseStatus = atom({
   key: 'responseStatus',
   default: ''
-})
-
-export const driversState = atom({
-  key: 'driversState',
-  default: []
 })
 
 export const uidState = atom ({

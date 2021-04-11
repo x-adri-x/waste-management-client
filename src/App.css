@@ -2,6 +2,7 @@
   text-align: center;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 15px;
+  padding: 0 !important;
 }
 
 a {
@@ -21,6 +22,14 @@ a {
   padding: 0em;
 }
 
+.row {
+  margin-right: 0px !important;
+}
+
+.login {
+  display: inline-block;
+}
+
 .drivers-label {
   padding: 1.8vh 3vw 1.8vh 0.5vw;
   font-size: 2em;
@@ -37,11 +46,22 @@ ul {
   list-style-type: none;
 }
 
-.navigation ul li {
+.navigation ul a {
   display: inline;
   padding-left: 5vw;
   padding-right: 5vw;
   font-size: 1.2em;
+  letter-spacing: 2;
+}
+
+.navigation ul button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2em;
+  color: white;
+  float: right;
+  margin-bottom: 2px;
+  padding-right: 5vw;
 }
 
 .drivers-admin-btns {
@@ -146,7 +166,16 @@ form p {
   margin-bottom: 2vh;
 }
 
+.list-item-box p {
+  width: -webkit-fill-available;
+  display: grid;
+}
+
 .messagebox {
   width: 25vw;
   height: 12vh;
+}
+
+.logout.btn {
+  background-color: gainsboro;
 }

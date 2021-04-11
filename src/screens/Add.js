@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {warningMessageState, responseStatus} from '../atoms/Atoms.js';
 import {validateData} from '../utils/formfunction.js'
 import {generateUrl, validateSQLResult} from '../utils/retrieving_data.js'
@@ -8,8 +8,7 @@ import {generateUrl, validateSQLResult} from '../utils/retrieving_data.js'
 function Add(){
 
     const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
-    const [response, setResponse] = useRecoilState(responseStatus)
-    let message = useRecoilValue(warningMessageState)
+    const setResponse = useSetRecoilState(responseStatus)
     let responseMessage = useRecoilValue(responseStatus)
     let messages = []
 
@@ -24,6 +23,8 @@ function Add(){
     async function handleSubmit(e) {
         setResponse('')
         e.preventDefault()
+
+        
         const data = new FormData(e.target)
         const firstName = data.get('firstName') || null
         const lastName = data.get('lastName') || null
@@ -133,7 +134,7 @@ function Add(){
             />
             </div>
             <button type="submit" className="btn btn-outline-info">Add driver</button>
-            {message ? <p className = 'warning'>{message}</p> : null}
+            {warningMessage ? <p className = 'warning'>{warningMessage}</p> : null}
             {responseMessage ? <p>{responseMessage}</p> : null}
         </form>
         </div>

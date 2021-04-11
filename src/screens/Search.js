@@ -1,18 +1,17 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Result from '../components/Result.js'
-import {searchState, warningMessageState, responseStatus} from '../atoms/Atoms.js'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {listState, warningMessageState, responseStatus} from '../atoms/Atoms.js'
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { generateUrl } from '../utils/retrieving_data.js';
 import {validateSQLResult} from '../utils/retrieving_data.js'
 import {formatDriver} from '../utils/formatting.js'
+import { toggleHidden } from '../utils/toggleHidden.js';
 
 function Search () { 
-    const [search, setSearch] = useRecoilState(searchState)
+    const setList = useSetRecoilState(listState)
     const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
-    const [response, setResponse] = useRecoilState(responseStatus)
-    let responseMessage = useRecoilValue(responseStatus)
-    let warning = useRecoilValue(warningMessageState)
+    const setResponse = useSetRecoilState(responseStatus)
     let messages = []
 
     const onSubmit = async(e) => {
@@ -39,8 +38,9 @@ function Search () {
             .then(response => response.json())
             .then(result => {
                 const formatted_list = formatDriver(result)
-                setSearch(formatted_list)
+                setList(formatted_list)
                 setResponse(validateSQLResult(result))
+                toggleHidden('result')
             })
         
         document.querySelector('#searchForm').reset()
@@ -59,7 +59,7 @@ function Search () {
         const length = e.target.value.length
         const value =e.target.value
         let msg = ''
-        console.log('im in handleChange beginning: '+warning)
+        console.log('im in handleChange beginning: '+ warningMessage)
         if(name === 'firstName' || name === 'lastName'){
             if(value.match(/\d+/g) != null){
                 msg = 'Name contains numbers.'
@@ -95,7 +95,7 @@ function Search () {
                         onChange = {handleChange} 
                         />
                     </div>
-                    {validateForm ? <p className = 'warning'>{warning}</p> : null }
+                    {validateForm ? <p className = 'warning'>{warningMessage}</p> : null }
                     <button type="submit" className="btn btn-outline-info">Search driver</button>
                 </form>
                 <Result />

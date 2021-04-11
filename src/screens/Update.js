@@ -1,14 +1,13 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {responseStatus, warningMessageState} from '../atoms/Atoms.js'
-import {useRecoilValue, useRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import {validateData} from '../utils/formfunction.js'
 import { generateUrl, validateSQLResult } from '../utils/retrieving_data.js';
 
 function Update () { 
-    const [response, setResponse] = useRecoilState(responseStatus)
+    const setResponse = useSetRecoilState(responseStatus)
     const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
-    const message = useRecoilValue(warningMessageState)
     let messages = []
 
     function handleChange (e) {
@@ -115,7 +114,7 @@ function Update () {
                         />
                     </div>
                     <button type="submit" className="btn btn-outline-info">Update driver</button>
-                    {message ? <p className = 'warning'>{message}</p> : null}
+                    {warningMessage ? <p className = 'warning'>{warningMessage}</p> : null}
                 </form>
             </div>
         )

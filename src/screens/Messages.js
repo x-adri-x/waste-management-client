@@ -1,14 +1,14 @@
 import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { searchState, uidState, messageState, idState } from '../atoms/Atoms.js'
+import { useRecoilState, useRecoilValue} from 'recoil'
+import { listState, uidState, messageState, idState } from '../atoms/Atoms.js'
 import Result from '../components/Result.js'
 import {generateUrl} from '../utils/retrieving_data.js'
 import {toggleHidden} from '../utils/toggleHidden.js'
 
 function MessagesStarterScreen() {
 
-    const [search, setSearch] = useRecoilState(searchState)
-    const [uid, setUID] = useRecoilState(uidState)
+    const [list, setList] = useRecoilState(listState)
+    const uid = useRecoilValue(uidState)
     const [message, setMessage] = useRecoilState(messageState)
     const messageID = useRecoilValue(idState)
     
@@ -18,15 +18,12 @@ function MessagesStarterScreen() {
         fetch(url)
         .then(notifications => notifications.json())
         .then(result => {
-            result && toggleHidden('textbox')
-
-            setSearch(result)
+            setList(result)
+            toggleHidden('result')
         })
     }
 
     const sendExpoMessage = async() => {
-        const _uid = uid
-        const _message = message
         const timestamp = new Date().toLocaleString()
         
 
@@ -107,14 +104,15 @@ function MessagesStarterScreen() {
             <button className = 'bigbutton' onClick = {showMessages} name = 'driver'>Drivers messages</button>
         </div>
         <div>
-            <Result />
-            
-            <div className = 'textbox hidden'>
-                <input className = 'messagebox' type = 'textarea' value = {message} onChange = {e => setMessage(e.target.value)}/>
-                <input type = 'text' placeholder = 'uid' value = {uid} onChange = {e => setUID(e.target.value)}/>
-                <input type = 'text' placeholder = 'message id' value  = {messageID}/>
-                <button className = 'smallbutton' onClick = {sendExpoMessage}>Send</button>
-            </div>
+        <Result />
+        {list.length > 0 ? 
+            (<div className = 'textbox hidden'>
+            <input className = 'messagebox' type = 'textarea' value = {message} onChange = {e => setMessage(e.target.value)}/>
+            <input type = 'text' placeholder = 'uid' value = {uid} readOnly/>
+            <input type = 'text' placeholder = 'message id' value  = {messageID} readOnly/>
+            <button className = 'smallbutton' onClick = {sendExpoMessage}>Send</button>
+        </div>) : null
+        }
             
         </div>
         </div>
