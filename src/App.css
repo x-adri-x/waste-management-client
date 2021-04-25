@@ -90,9 +90,17 @@ input {
   margin-top: 1vh !important;
 }
 
+.login input {
+  width: 20vw;
+  height: 3vh;
+  border-radius: 1vh;
+}
+
 form input {
   display: inline;
   float: right;
+  width: 12vw;
+  border-radius: 0.8vw;
 }
 
 form div {

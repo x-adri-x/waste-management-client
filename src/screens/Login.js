@@ -56,7 +56,7 @@ function Login() {
                 <h3>Login to the Admin Page</h3>
                 <input type = 'email' value = {email} onChange = {e => {handleChange(e)}}></input>
                 <input type = 'password' value = {password} onChange = {e => {handleChange(e)}}></input>
-                <button onClick = {login}>Login</button>
+                <button onClick = {login} className = 'smallbutton'>Login</button>
                 </div>
             ): null}
             

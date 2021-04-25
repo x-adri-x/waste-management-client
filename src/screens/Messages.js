@@ -12,15 +12,14 @@ function MessagesStarterScreen() {
     const [message, setMessage] = useRecoilState(messageState)
     const messageID = useRecoilValue(idState)
     
-    const showMessages = (e) => {
+    const showMessages = async(e) => {
         const agent = e.target.name
         let url = generateUrl(`notifications/agent/${agent}`)
-        fetch(url)
+        let result = await fetch(url)
         .then(notifications => notifications.json())
-        .then(result => {
-            setList(result)
-            toggleHidden('result')
-        })
+        .then(result => result)
+        setList(result)
+        toggleHidden('result')
     }
 
     const sendExpoMessage = async() => {

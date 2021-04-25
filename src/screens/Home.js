@@ -24,21 +24,19 @@ function Home () {
         "status_id": 1
       }
       let url = generateUrl('drivers/search')
-      
-      await fetch(url, {
-        method: 'POST',
-        headers: {
+      let result = await fetch(url, {
+          method: 'POST',
+          headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(searchParam)
-        })
-        .then(response => response.json())
-        .then(result => {
-          const formatted_list = formatDriver(result)
-          setList(formatted_list)
-          toggleHidden('list')
-        })
+          },
+          body: JSON.stringify(searchParam)
+          })
+          .then(response => response.json())
+          .then(result => result)
+      const formatted_list = formatDriver(result)
+      setList(formatted_list)
+      toggleHidden('list')
     }
 
 

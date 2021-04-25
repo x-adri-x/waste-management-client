@@ -23,7 +23,7 @@ function Add(){
     async function handleSubmit(e) {
         setResponse('')
         e.preventDefault()
-
+        
         
         const data = new FormData(e.target)
         const firstName = data.get('firstName') || null
@@ -32,34 +32,76 @@ function Add(){
         const privatePhone = data.get('privatePhone') || null
         const workPhone = data.get('workPhone') || null
         const email = data.get('email') || null
-        const uid = data.get('uid')  || null
+        const password = data.get('password')  || null
 
-    
-        const driver = {
-            "first_name": firstName,
-            "last_name": lastName,
-            "uid": uid,
-            "date_of_birth": dateOfBirth,
-            "private_phone": privatePhone,
-            "work_phone": workPhone,
-            "email_address": email,
-            "status_id": 0
+        try {
+            const regex_pw = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}/
+            const regex_email = /[a-zA-Z0-9]+@.+\.[a-z]+/
+            if(password.length < 8){
+                alert("Please use at least 8 characters.")
+                return
+            }
+            if(!password.match(regex_pw)) {
+                alert("Password must have uppercase letters and numbers in it.")
+                return
+            }
+            if(!email.match(regex_email)) {
+                alert("Email must not contain special characters.")
+                return
+            }
+
+            const payload = {
+                email: email,
+                password: password,
+                returnSecureToken: true
+            }
+            
+            let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_DRIVERS_FIREBASE_KEY}`  
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            }).then(response => response.json()).then(result => {
+                if(result?.error?.message === 'EMAIL_EXISTS'){
+                    alert('An account with this email address already exists.')
+                }
+                
+                if(result?.localId){
+                    const driver = {
+                        "first_name": firstName,
+                        "last_name": lastName,
+                        "uid": result?.localId,
+                        "date_of_birth": dateOfBirth,
+                        "private_phone": privatePhone,
+                        "work_phone": workPhone,
+                        "email_address": email,
+                        "status_id": 0
+                    }
+                    saveUserToDatabase(driver)
+                }
+            }) 
+        } catch (e) {
+            console.log('An error occured: ' + e.toString())
         }
-        
-        let url = generateUrl('drivers')
-        document.querySelector('#addform').reset()
-        await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(driver)
-            })
-            .then(response => response.json())
-            .then(result => {
-                setResponse(validateSQLResult(result))
-            })
+    }
+
+        async function saveUserToDatabase(driver){
+            let url = generateUrl('drivers')
+            document.querySelector('#addform').reset()
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(driver)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    setResponse(validateSQLResult(result))
+                })
         }
 
     return(
@@ -81,16 +123,6 @@ function Add(){
             type = 'text' 
             id = 'lastName' 
             name = 'lastName' 
-            onChange = {handleChange} 
-            placeholder = '*'
-            />
-            </div>
-            <div>
-            <label htmlFor = 'uid'>UID:</label>
-            <input 
-            type = 'text' 
-            id = 'uid' 
-            name = 'uid' 
             onChange = {handleChange} 
             placeholder = '*'
             />
@@ -132,6 +164,16 @@ function Add(){
             onChange = {handleChange} 
             placeholder = '*'
             />
+            <div>
+            <label htmlFor = 'uid'>Password:</label>
+            <input 
+            type = 'password' 
+            id = 'password' 
+            name = 'password' 
+            onChange = {handleChange}
+            placeholder = '*'
+            />
+            </div>
             </div>
             <button type="submit" className="btn btn-outline-info">Add driver</button>
             {warningMessage ? <p className = 'warning'>{warningMessage}</p> : null}

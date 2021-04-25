@@ -1,6 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Result from '../components/Result.js'
+import List from '../components/List.js'
 import {listState, warningMessageState, responseStatus} from '../atoms/Atoms.js'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { generateUrl } from '../utils/retrieving_data.js';
@@ -40,7 +40,7 @@ function Search () {
                 const formatted_list = formatDriver(result)
                 setList(formatted_list)
                 setResponse(validateSQLResult(result))
-                toggleHidden('result')
+                toggleHidden('list')
             })
         
         document.querySelector('#searchForm').reset()
@@ -59,7 +59,6 @@ function Search () {
         const length = e.target.value.length
         const value =e.target.value
         let msg = ''
-        console.log('im in handleChange beginning: '+ warningMessage)
         if(name === 'firstName' || name === 'lastName'){
             if(value.match(/\d+/g) != null){
                 msg = 'Name contains numbers.'
@@ -81,7 +80,6 @@ function Search () {
                         <label htmlFor = 'firstName'>First name:</label>
                         <input 
                         type = 'text' 
-                        id = 'firstName' 
                         name = 'firstName' 
                         onChange = {handleChange}
                         />
@@ -89,8 +87,7 @@ function Search () {
                     <div>
                         <label htmlFor = 'lastName'>Last name:</label>
                         <input 
-                        type = 'text' 
-                        id = 'lastName' 
+                        type = 'text'  
                         name = 'lastName'
                         onChange = {handleChange} 
                         />
@@ -98,7 +95,7 @@ function Search () {
                     {validateForm ? <p className = 'warning'>{warningMessage}</p> : null }
                     <button type="submit" className="btn btn-outline-info">Search driver</button>
                 </form>
-                <Result />
+                <List />
             </div>
         )
     }

@@ -1,13 +1,15 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {responseStatus, warningMessageState} from '../atoms/Atoms.js'
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {responseStatus, uidState, warningMessageState} from '../atoms/Atoms.js'
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {validateData} from '../utils/formfunction.js'
 import { generateUrl, validateSQLResult } from '../utils/retrieving_data.js';
 
 function Update () { 
     const setResponse = useSetRecoilState(responseStatus)
     const [warningMessage, setWarningMessage] = useRecoilState(warningMessageState)
+    const uid = useRecoilValue(uidState)
+    
     let messages = []
 
     function handleChange (e) {
@@ -52,8 +54,7 @@ function Update () {
                     <div>
                         <label htmlFor = 'first_name'>First name:</label>
                         <input 
-                        type = 'text' 
-                        id = 'first_name' 
+                        type = 'text'
                         name = 'first_name' 
                         onChange = {handleChange}
                         />
@@ -61,8 +62,7 @@ function Update () {
                     <div>
                         <label htmlFor = 'last_name'>Last name:</label>
                         <input 
-                        type = 'text' 
-                        id = 'last_name' 
+                        type = 'text'  
                         name = 'last_name' 
                         onChange = {handleChange}
                         />
@@ -71,17 +71,16 @@ function Update () {
                         <label htmlFor = 'uid'>UID:</label>
                         <input 
                         type = 'text' 
-                        id = 'uid' 
                         name = 'uid'
                         placeholder = '*'
+                        value = {uid}
                         onChange = {handleChange}
                         />
                     </div>
                     <div>
                         <label htmlFor = 'date_of_birth'>Date of birth:</label>
                         <input 
-                        type = 'date' 
-                        id = 'date_of_birth' 
+                        type = 'date'  
                         name = 'date_of_birth' 
                         onChange = {handleChange}
                         />
@@ -89,8 +88,7 @@ function Update () {
                     <div>
                         <label htmlFor = 'private_phone'>Phone number(private):</label>
                         <input 
-                        type = 'tel' 
-                        id = 'private_phone' 
+                        type = 'tel'  
                         name = 'private_phone' 
                         onChange = {handleChange}
                         />
@@ -99,7 +97,6 @@ function Update () {
                         <label htmlFor = 'work_phone'>Phone number(work):</label>
                         <input 
                         type = 'tel' 
-                        id = 'work_phone' 
                         name = 'work_phone' 
                         onChange = {handleChange}
                         />
@@ -108,7 +105,6 @@ function Update () {
                         <label htmlFor = 'email'>E-mail:</label>
                         <input 
                         type = 'email' 
-                        id = 'email' 
                         name = 'email' 
                         onChange = {handleChange}
                         />

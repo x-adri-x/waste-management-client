@@ -9,7 +9,7 @@ import Add from './Add.js'
 import Update from './Update.js'
 import Search from './Search.js'
 import {useSetRecoilState} from 'recoil'
-import {listState} from '../atoms/Atoms.js'
+import {listState, uidState} from '../atoms/Atoms.js'
 import {toggleHidden} from '../utils/toggleHidden.js'
 import {generateUrl} from '../utils/retrieving_data.js'
 import {formatDriver} from '../utils/formatting.js'
@@ -17,19 +17,21 @@ import {formatDriver} from '../utils/formatting.js'
 function Drivers () {
 
     const setList = useSetRecoilState(listState)
+    const setUid = useSetRecoilState(uidState)
 
-    function listDrivers() {
+    async function listDrivers() {
         let url = generateUrl('drivers')
-        fetch(url)
+        setUid('')
+        let result = await fetch(url)
         .then(response => response.json())
-        .then(result => {
-          const formatted_list = formatDriver(result)
-          setList(formatted_list)
-          toggleHidden('list')
-        })
+        .then(result => result)
+        const formatted_list = formatDriver(result)
+        setList(formatted_list)
+        toggleHidden('list')
       }
     
       function addDrivers () {
+        setUid('')
         setList([])
         toggleHidden('add')
       }
@@ -40,6 +42,7 @@ function Drivers () {
       }
     
       function searchDrivers () {
+        setUid('')
         setList([])
         toggleHidden('search')
       }

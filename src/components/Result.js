@@ -20,7 +20,8 @@ function Result () {
     return (
         <div style = {{marginTop: '2vh'}} className = 'result hidden'>
             <h3>Results</h3>
-            {(results).map((obj, index) => {
+            {results.length > 0 ? 
+            results.map((obj, index) => {
                 return(
                     <div key = {index} className = 'list-item-box' onClick = {(e) => grabID(e)} spec = {obj['uid']}>
                         {Object.entries(obj).map(([key, val]) => 
@@ -28,7 +29,7 @@ function Result () {
                         )}
                     </div>
                     )  
-            })}
+            }) : <p>There is nothing to show.</p>}
         </div>
     )  
 } 
