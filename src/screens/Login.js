@@ -18,10 +18,13 @@ function Login() {
             askForNotificationPermission()
         })
         .catch(function(error){
+            console.log(error)
             if (error.code === 'auth/user-not-found'){
               alert('User not found.')
             } else if (error.code === 'auth/wrong-password'){
               alert('Wrong password.')
+            } else if (error.code === 'auth/invalid-email'){
+                alert(error.message)
             }
         })
     }
@@ -65,3 +68,4 @@ function Login() {
   }
   
   export default Login;
+

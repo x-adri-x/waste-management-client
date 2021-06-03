@@ -23,7 +23,7 @@ function Update () {
     function handleSubmit(e) {
         e.preventDefault()
         const data = new FormData(e.target)
-        const fields = ['first_name', 'last_name', 'uid', 'date_of_birth', 'private_phone', 'work_phone', 'email']
+        const fields = ['first_name', 'last_name', 'uid', 'date_of_birth', 'private_phone', 'work_phone', 'email_address']
         let body = {}
 
         fields.map(field =>  {
@@ -31,8 +31,9 @@ function Update () {
         })
         
         let url = generateUrl('drivers/update/uid/')
-        url = `${body.uid}`
+        url += `${body.uid}`
         document.querySelector('#updateform').reset()
+        console.log(body)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -43,7 +44,8 @@ function Update () {
             })
             .then(response => response.json())
             .then(result => {
-                setResponse(validateSQLResult(result))
+                console.log(result)
+                setWarningMessage(validateSQLResult(result))
             })
     }
    
@@ -105,7 +107,7 @@ function Update () {
                         <label htmlFor = 'email'>E-mail:</label>
                         <input 
                         type = 'email' 
-                        name = 'email' 
+                        name = 'email_address' 
                         onChange = {handleChange}
                         />
                     </div>

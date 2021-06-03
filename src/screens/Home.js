@@ -47,7 +47,7 @@ function Home () {
         "status_id": 1
       }
       let url = generateUrl('drivers/search')
-      let result = await fetch(url, {
+      let drivers = await fetch(url, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -57,8 +57,24 @@ function Home () {
           })
           .then(response => response.json())
           .then(result => result)
-          console.log(result)
-          result.length > 0 ? setMessage(`Currently ${result.length} driver/s are available.`) : setMessage('There are no logged in drivers.') 
+      if(drivers.length > 0) {
+        let _url = generateUrl('maps/routes')
+        let routes = await fetch(_url).then(response => response.json()).then(result => result)
+        let route_id = routes[0].route_id
+        let update_url = generateUrl(`maps/routes/route_id/${route_id}`)
+        let body = {
+          'driver_id': drivers[0].uid
+        }
+        fetch(update_url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }).then(response => response.json()).then(result => console.log(result))
+      }
+      
+      drivers.length > 0 ? setMessage(`The route was assigned to ${drivers[0].email_address}.`) : setMessage('There are no logged in drivers.') 
     }
 
     const logout = () => {

@@ -22,10 +22,8 @@ function MessagesStarterScreen() {
         toggleHidden('result')
     }
 
-    const sendExpoMessage = async() => {
+    const sendExpoMessage = async(e) => {
         const timestamp = new Date().toLocaleString()
-        
-
         let url = generateUrl(`users/uid/${uid}`)
         const ExponentPushToken = await fetch(url).then(response => response.json()).then(result => {return result[0].ExponentPushToken})
 
@@ -73,8 +71,10 @@ function MessagesStarterScreen() {
             }
         })
 
-        const status = {
-            'status': 'in progress'
+        let status = ''
+        e.target?.id === 'close-button' ? status = 'done' : status = 'in-progress'
+        const body = {
+            'status': status
         }
         let __url = generateUrl(`notifications/id/${messageID}`)
         fetch(__url, {
@@ -84,7 +84,7 @@ function MessagesStarterScreen() {
                 'Accept-encoding': 'gzip, deflate',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(status)
+            body: JSON.stringify(body)
         })
         .then(response => response.json())
         .then(result => {
@@ -94,6 +94,10 @@ function MessagesStarterScreen() {
                 console.log(result.sqlMessage)
             }
         })
+    }
+
+    const close = (e) => {
+        console.log(e.target.id)
     }
 
     return (
@@ -106,10 +110,12 @@ function MessagesStarterScreen() {
         <Result />
         {list.length > 0 ? 
             (<div className = 'textbox hidden'>
-            <input className = 'messagebox' type = 'textarea' value = {message} onChange = {e => setMessage(e.target.value)}/>
+            <p className = 'header-text'>Send a reply to the selected message:</p>    
+            <textarea className = 'messagebox' wrap = 'soft' value = {message} onChange = {e => setMessage(e.target.value)}></textarea>
             <input type = 'text' placeholder = 'uid' value = {uid} readOnly/>
             <input type = 'text' placeholder = 'message id' value  = {messageID} readOnly/>
-            <button className = 'smallbutton' onClick = {sendExpoMessage}>Send</button>
+            <button className = 'smallbutton' onClick = {sendExpoMessage}>Send message</button>
+            <button className = 'smallbutton' id = 'close-button' onClick = {close}>Close the issue</button>
         </div>) : null
         }
             

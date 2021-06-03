@@ -9,11 +9,19 @@ function Result () {
     const setUid = useSetRecoilState(uidState)
 
     const grabID = (e) => {
-        let uid = e.target.getAttribute('spec')
+        let uid = ''
+        if(e.target.nodeName === 'DIV'){
+            uid = e.target.getAttribute('spec')
+        } else if(e.target.nodeName === 'SPAN'){
+            uid = e.target.parentNode.parentNode.getAttribute('spec')
+        } else {
+            uid = e.target.parentNode.getAttribute('spec')
+        }
         let id = document.querySelector('.list-item-box').firstElementChild.textContent
         id = id.split(': ')[1]
         setKey(id)
         setUid(uid)
+        console.log(uid)
         toggleHidden('textbox')
     }
     
